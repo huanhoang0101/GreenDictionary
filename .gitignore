@@ -1,0 +1,9 @@
+# Node.js dependencies
+node_modules/
+**/node_modules/
+
+# JMdict database
+dictionary_api/data/jmdict-all-3.6.2.json
+
+# Environment files
+.env
