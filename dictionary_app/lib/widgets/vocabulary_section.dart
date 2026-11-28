@@ -71,41 +71,69 @@ class _VocabularySectionState extends State<VocabularySection> {
 
   // Lấy cách viết tiếng Nhật để hiển thị.
   String getWordText(Map<String, dynamic> word) {
-    final kanji = word['kanji'] as List<dynamic>? ?? [];
-    final kana = word['kana'] as List<dynamic>? ?? [];
+  final kanji = word['kanji'] as List<dynamic>? ?? [];
+  final kana = word['kana'] as List<dynamic>? ?? [];
 
-    if (kanji.isNotEmpty) {
-      return kanji.first.toString();
+  if (kanji.isNotEmpty) {
+    final first = kanji.first;
+
+    if (first is Map) {
+      return first['text']?.toString() ?? '';
     }
 
-    if (kana.isNotEmpty) {
-      return kana.first.toString();
-    }
-
-    return '';
+    return first.toString();
   }
+
+  if (kana.isNotEmpty) {
+    final first = kana.first;
+
+    if (first is Map) {
+      return first['text']?.toString() ?? '';
+    }
+
+    return first.toString();
+  }
+
+  return '';
+}
 
   // Lấy cách đọc.
   String getReading(Map<String, dynamic> word) {
-    final kana = word['kana'] as List<dynamic>? ?? [];
+  final kana = word['kana'] as List<dynamic>? ?? [];
 
-    if (kana.isNotEmpty) {
-      return kana.first.toString();
+  if (kana.isNotEmpty) {
+    final first = kana.first;
+
+    if (first is Map) {
+      return first['text']?.toString() ?? '';
     }
 
-    return '';
+    return first.toString();
   }
+
+  return '';
+}
 
   // Lấy nghĩa tiếng Anh.
   String getMeaning(Map<String, dynamic> word) {
-    final meanings = word['meanings'] as List<dynamic>? ?? [];
+  final meanings = word['meanings'] as List<dynamic>? ?? [];
 
-    if (meanings.isEmpty) {
-      return 'No meaning available';
-    }
-
-    return meanings.take(2).join(', ');
+  if (meanings.isEmpty) {
+    return 'No meaning available';
   }
+
+  return meanings
+      .take(2)
+      .map((item) {
+        if (item is Map) {
+          return item['text']?.toString() ?? '';
+        }
+
+        return item.toString();
+      })
+      .where((text) => text.isNotEmpty)
+      .join(', ');
+}
 
   // Tạo thẻ từ vựng có thể nhấn.
   Widget buildWordCard(Map<String, dynamic> word) {
